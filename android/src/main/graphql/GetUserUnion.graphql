@@ -1,6 +1,6 @@
-query GetSupplierQuery($id: String!) {
-    supplier(id: $id) {
-        ... on Supplier {
+query GetUserUnionQuery($id: String!) {
+    userUnion(id: $id) {
+        ... on User {
             id
             name
         }

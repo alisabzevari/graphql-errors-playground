@@ -3,26 +3,68 @@ import { db } from "./db";
 // Resolvers define how to fetch the types defined in your schema.
 // This resolver retrieves books from the "books" array above.
 export const resolvers = {
-  SupplierUnionResponse: {
+  UserUnionResponse: {
     __resolveType(obj, contextValue, info) {
-      console.log(obj);
-      if (obj.id) {
-        return "Supplier";
-      }
-
-      return "NotFoundError";
+      return obj.__typename;
     },
   },
   Query: {
-    supplierUnion(parent, args, contextValue, info) {
-      const result = db.suppliers.find((supplier) => supplier.id === args.id);
+    userUnion(parent, args, contextValue, info) {
+      if (args.id === "3") {
+        return {
+          __typename: "UserIsBusy",
+          type: "UserIsBusy",
+          message: "User is really busy!",
+          reason: "PERSONAL_REASONS",
+        };
+      }
+
+      const result = db.users.find((user) => user.id === args.id);
       if (result) {
-        return result;
+        return {
+          __typename: "User",
+          ...result,
+        };
       }
 
       return {
+        __typename: "NotFoundError",
         type: "NOT_FOUND",
         message: "not found",
+      };
+    },
+
+    userResult(parent, args, contextValue, info) {
+      if (args.id === "3") {
+        return {
+          type: "ERROR",
+          error: {
+            __typename: "UserIsBusy",
+            type: "UserIsBusy",
+            message: "User is really busy!",
+            reason: "PERSONAL_REASONS",
+          },
+        };
+      }
+
+      const result = db.users.find((user) => user.id === args.id);
+      if (result) {
+        return {
+          type: "SUCCESS",
+          success: {
+            __typename: "Supplier",
+            ...result,
+          },
+        };
+      }
+
+      return {
+        type: "ERROR",
+        error: {
+          __typename: "NotFoundError",
+          type: "NOT_FOUND",
+          message: "not found",
+        },
       };
     },
   },

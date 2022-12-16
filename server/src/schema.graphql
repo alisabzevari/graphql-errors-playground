@@ -20,25 +20,34 @@ type UnAuthorizedError implements ErrorResponse {
   data: ErrorData
 }
 
-type Supplier {
+type UserIsBusy implements ErrorResponse {
+  type: String!
+  message: String
+  data: ErrorData
+  reason: String
+}
+
+type User {
   id: String!
   name: String
 }
 
 type Query {
-  supplierUnion(id: String!): SupplierUnionResponse
-  supplierResult(id: String!): SupplierResultResponse
+  "The union format"
+  userUnion(id: String!): UserUnionResponse
+  "The result format"
+  userResult(id: String!): UserResultResponse
 }
 
-union SupplierUnionResponse = Supplier | NotFoundError | UnAuthorizedError
+union UserUnionResponse = User | UserIsBusy | NotFoundError | UnAuthorizedError
 
 enum ResponseType {
-    SUCCESS
-    ERROR
+  SUCCESS
+  ERROR
 }
 
-type SupplierResultResponse {
-    type: ResponseType
-    success: Supplier
-    error: ErrorResponse
+type UserResultResponse {
+  type: ResponseType
+  success: User
+  error: ErrorResponse
 }

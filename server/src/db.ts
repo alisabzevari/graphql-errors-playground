@@ -1,5 +1,5 @@
 export const db = {
-  suppliers: [
+  users: [
     {
       id: "1",
       name: "Kate Chopin",

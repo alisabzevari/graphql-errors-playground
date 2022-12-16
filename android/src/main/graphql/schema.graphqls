@@ -1,4 +1,3 @@
-
 interface ErrorData {
     correlationId: String
 }
@@ -15,13 +14,40 @@ type NotFoundError implements ErrorResponse {
     data: ErrorData
 }
 
-type Supplier {
+type UnAuthorizedError implements ErrorResponse {
+    type: String!
+    message: String
+    data: ErrorData
+}
+
+type UserIsBusy implements ErrorResponse {
+    type: String!
+    message: String
+    data: ErrorData
+    reason: String
+}
+
+type User {
     id: String!
     name: String
 }
 
 type Query {
-    supplier(id: String!): SupplierResponse
+    "The union format"
+    userUnion(id: String!): UserUnionResponse
+    "The result format"
+    userResult(id: String!): UserResultResponse
 }
 
-union SupplierResponse = Supplier | NotFoundError
+union UserUnionResponse = User | UserIsBusy | NotFoundError | UnAuthorizedError
+
+enum ResponseType {
+    SUCCESS
+    ERROR
+}
+
+type UserResultResponse {
+    type: ResponseType
+    success: User
+    error: ErrorResponse
+}
