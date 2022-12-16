@@ -1,0 +1,27 @@
+
+interface ErrorData {
+    correlationId: String
+}
+
+interface ErrorResponse {
+    type: String!
+    message: String
+    data: ErrorData
+}
+
+type NotFoundError implements ErrorResponse {
+    type: String!
+    message: String
+    data: ErrorData
+}
+
+type Supplier {
+    id: String!
+    name: String
+}
+
+type Query {
+    supplier(id: String!): SupplierResponse
+}
+
+union SupplierResponse = Supplier | NotFoundError
