@@ -1,0 +1,44 @@
+interface ErrorData {
+  correlationId: String
+}
+
+interface ErrorResponse {
+  type: String!
+  message: String
+  data: ErrorData
+}
+
+type NotFoundError implements ErrorResponse {
+  type: String!
+  message: String
+  data: ErrorData
+}
+
+type UnAuthorizedError implements ErrorResponse {
+  type: String!
+  message: String
+  data: ErrorData
+}
+
+type Supplier {
+  id: String!
+  name: String
+}
+
+type Query {
+  supplierUnion(id: String!): SupplierUnionResponse
+  supplierResult(id: String!): SupplierResultResponse
+}
+
+union SupplierUnionResponse = Supplier | NotFoundError | UnAuthorizedError
+
+enum ResponseType {
+    SUCCESS
+    ERROR
+}
+
+type SupplierResultResponse {
+    type: ResponseType
+    success: Supplier
+    error: ErrorResponse
+}
