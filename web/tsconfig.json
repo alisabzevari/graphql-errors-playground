@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+      "rootDirs": ["src"],
+      "lib": ["es2020"],
+      "esModuleInterop": true,
+      "types": ["node"]
+    }
+  }

@@ -37,6 +37,7 @@ type Query {
     userUnion(id: String!): UserUnionResponse
     "The result format"
     userResult(id: String!): UserResultResponse
+    user(id: String!): User
 }
 
 union UserUnionResponse = User | UserIsBusy | NotFoundError | UnAuthorizedError

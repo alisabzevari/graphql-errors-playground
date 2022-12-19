@@ -1,4 +1,6 @@
 import { db } from "./db";
+import { GraphQLError } from "graphql";
+// import { ApolloServerErrorCode } from "@apollo/server/errors";
 
 // Resolvers define how to fetch the types defined in your schema.
 // This resolver retrieves books from the "books" array above.
@@ -66,6 +68,26 @@ export const resolvers = {
           message: "not found",
         },
       };
+    },
+
+    user(parent, args, contextValue, info) {
+      if (args.id === "3") {
+        throw new GraphQLError("User us really busy!", {
+          extensions: {
+            reason: "PERSONAL_REASONS",
+            code: "UserIsBusy",
+          },
+        });
+      }
+
+      const result = db.users.find((user) => user.id === args.id);
+      if (result) {
+        return result;
+      }
+
+      throw new GraphQLError("not found", {
+        extensions: { code: "NOT_FOUND" },
+      });
     },
   },
 };
